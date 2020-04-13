@@ -10,7 +10,7 @@ function abr() {
   var input = document.createElement('input');
   input.type = 'file';
   input.id = 'archivo';
-  input.accept = 'text/.er'; // extencion a permitir
+  input.accept = '.cs'; // extencion a permitir
 
   input.onchange = e => {
 
@@ -25,7 +25,7 @@ function abr() {
       var contenido = readerEvent.target.result;
 
       np++;
-      crePes(file.name.replace(".txt", ""), contenido, np);
+      crePes(file.name.replace(".cs", ""), contenido, np);
     }
   }
 
@@ -40,11 +40,12 @@ function gua() {
   ttex = document.getElementById("t" + ide).value;
   tnom = document.getElementById("p" + ide).innerHTML;
 
-  if (tnom.endsWith(".txt")) {
-    alert("si termina");
+  if (tnom.endsWith(".cs")) {
+    //alert("si termina");
   } else {
-    tnom += ".txt";
+    tnom += ".cs";
   }
+
   var elem = document.getElementById('guardar');
   elem.download = tnom;
   elem.href = "data:application/octet-stream," + encodeURIComponent(ttex);
@@ -61,10 +62,10 @@ function guaCom() {
     ttex = document.getElementById("t" + ide).value;
     document.getElementById("p" + ide).innerHTML = tnom;
 
-    if (tnom.endsWith(".txt")) {
-      alert("si termina");
+    if (tnom.endsWith(".cs")) {
+      //alert("si termina");
     } else {
-      tnom += ".txt";
+      tnom += ".cs";
     }
 
     var elem = document.getElementById('guardarComo');
@@ -75,9 +76,14 @@ function guaCom() {
 
 //////////////////////////////////// Reportes
 function repErr() {
-  let t = new Token("0", "tk_ide", "var1", "5", "5");
+  // obtengo el texto
+  con = document.getElementsByClassName("tab-pane active");
+  ele = con[0];
+  ide = ele.getAttribute('id');
+  ttex = document.getElementById("t" + ide).value;
+
   let a = new AnaLex();
-  a.analizar();
+  a.analizar(ttex);
 }
 
 function repTok() {
@@ -89,7 +95,6 @@ function leer() {
   con = document.getElementsByClassName("tab-pane active");
   ele = con[0];
   ide = ele.getAttribute('id');
-
   ttex = document.getElementById("t" + ide).value;
 
   console.log(ttex);
@@ -119,9 +124,11 @@ function crePes(nom, cont, nps) {
 
   ntex = document.createElement('textarea');
   ntex.setAttribute("id", "t" + nps);
-  ntex.setAttribute("name", "message");
+  ntex.setAttribute("name", "texto");
   ntex.setAttribute("rows", "10");
   ntex.setAttribute("class", "input-block-level");
+  ntex.setAttribute("type", "email");
+  ntex.setAttribute("wrap", "off");
   ntex.innerHTML = cont;
 
   ndiv.appendChild(ntex);
