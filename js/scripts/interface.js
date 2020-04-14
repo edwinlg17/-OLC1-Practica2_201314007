@@ -75,7 +75,7 @@ function guaCom() {
 }
 
 //////////////////////////////////// Reportes
-function repErr() {
+function ana() {
   // obtengo el texto
   con = document.getElementsByClassName("tab-pane active");
   ele = con[0];
@@ -84,14 +84,15 @@ function repErr() {
 
   let a = new AnaLex();
   a.analizar(ttex);
+
 }
 
 function repTok() {
-
+  
 }
 
 //////////////////////////////////// otras
-function leer() {
+function repErr() {
   con = document.getElementsByClassName("tab-pane active");
   ele = con[0];
   ide = ele.getAttribute('id');

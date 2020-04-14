@@ -6,6 +6,7 @@ class AnaLex {
 
     ///////////////////////// METODOS
     analizar(tex) {
+        alert("aver si se actualiza");
         //let t = new Token("0", "tk_ide", "var1", "5", "5");
         tex += "\n  ";
         this.lisTok = [];
@@ -67,7 +68,7 @@ class AnaLex {
                         col++;
                     } else {
                         est = 0;
-                        this.agrTok(lex + " " + ft + " " + ct);
+                        this.agrTok(this.verPalRes(lex) + " " + lex + " " + ft + " " + ct);
                     }
                     break;
 
@@ -164,6 +165,7 @@ class AnaLex {
                         col++;
                     } else {
                         est = 0;
+
                     }
                     break;
                 // estado 9
@@ -268,19 +270,21 @@ class AnaLex {
             }
         }
 
-        console.log("//////////////////");
-        console.log("Tokens:");
+        con = document.getElementById("texSal");
+
+        con.innerHTML = "//////////////////\n";
+        con.innerHTML += "Tokens:\n";
+
         for (var i = 0; i < this.lisTok.length; i++) {
-            console.log(this.lisTok[i]);
+            con.innerHTML += this.lisTok[i] + "\n";
         }
 
-        console.log("Errores:");
+        con.innerHTML += "Errores:\n";
         for (var i = 0; i < this.lisErr.length; i++) {
-            console.log(this.lisErr[i]);
+            con.innerHTML += this.lisErr[i] + "\n";
         }
 
-
-        alert("fin analisis")
+        //alert("fin analisis")
     }
 
     // agrega tokens 
@@ -379,5 +383,87 @@ class AnaLex {
         }
         return false;
     }
+
+    verPalRes(lex) {
+        lex = lex.toLowerCase();
+
+        switch (lex) {
+            //////////////// de variable
+            case "int":
+                return "tkInt";
+                break;
+            case "double":
+                return "tokDou";
+                break;
+            case "char":
+                return "tkCha";
+                break;
+            case "bool":
+                return "tkBol";
+                break;
+            case "string":
+                return "tkstr";
+                break;
+
+            ///////////////// de funcion
+            case "void":
+                return "tkVoi";
+                break;
+            case "main":
+                return "tkMai";
+                break;
+
+            ///////////////// funcionales
+            case "return":
+                return "tkRet";
+                break;
+            case "break":
+                return "tkBre";
+                break;
+            case "continue":
+                return "tkCont";
+                break;
+
+            ///////////////// condicional
+            case "if":
+                return "tkIf";
+                break;
+            case "else":
+                return "tkEls";
+                break;
+
+            case "switch":
+                return "tkSwi";
+                break;
+            case "case":
+                return "tkCas";
+                break;
+            case "default":
+                return "tkDef";
+                break;
+
+            ///////////////// ciclos
+            case "for":
+                return "";
+                break;
+
+            case "do":
+                return "tkDo";
+                break;
+            case "while":
+                return "tkWhi";
+                break;
+
+            ///////////////// consola
+            case "console":
+                return "tkCons";
+                break;
+            case "write":
+                return "tkWri";
+                break;
+        }
+        return "tkIde";
+    }
+
 
 }

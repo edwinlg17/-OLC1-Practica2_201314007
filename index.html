@@ -55,7 +55,7 @@
                 <nav>
                   <ul class="nav topnav">
 
-                    <li><a href="#" onclick="leer()">Leer texto</a></li>
+                    <li><a href="#" onclick="ana()">Analizar</a></li>
 
                     <li class="dropdown active">
                       <a href="#">Archivo <i class="icon-angle-down"></i></a>
@@ -113,7 +113,7 @@
           <!-- Texto Salida -->
           <div class="span6">
             <p>Salida:</p>
-            <textarea id="texSal" name="texto_salida" rows="11" class="input-block-level" disabled></textarea>
+            <textarea id="texSal" type="email" wrap="off" name="texto_salida" rows="11" class="input-block-level" disabled></textarea>
 
           </div>
 
@@ -227,11 +227,11 @@
             <div class="tab-content">
 
               <div class="tab-pane active" id="html">
-                <textarea id="texHtml" name="texto_html" rows="10" class="input-block-level" disabled></textarea>
+                <textarea id="texHtml" type="email" wrap="off" name="texto_html" rows="10" class="input-block-level" disabled></textarea>
               </div>
 
               <div class="tab-pane" id="json">
-                <textarea id="texJson" name="texto_json" rows="10" class="input-block-level" disabled></textarea>
+                <textarea id="texJson" type="email" wrap="off" name="texto_json" rows="10" class="input-block-level" disabled></textarea>
               </div>
 
             </div>
@@ -281,6 +281,7 @@
   <script src="js/scripts/interface.js"></script>
   <script src="js/scripts/Tipos/Token.js"></script>
   <script src="js/scripts/Analizadores/AnaLex.js"></script>
+  <script src="js/scripts/AnalizadorLexico.js"></script>
   
 
   <!-- ========================== Plantilla ========================== -->
