@@ -1,13 +1,13 @@
 class AnaLex {
+
     ////////////////////////// CONSTRUCTOR
     constructor() {
         this.lisTok = [];
+        this.lisErr = [];
     }
-
+    
     ///////////////////////// METODOS
     analizar(tex) {
-        alert("aver si se actualiza");
-        //let t = new Token("0", "tk_ide", "var1", "5", "5");
         tex += "\n  ";
         this.lisTok = [];
         this.lisErr = [];
@@ -16,7 +16,7 @@ class AnaLex {
         var lex = "";
         var car = ' ';
 
-        var fil = 1, col = 1, ft = 0, ct = 0;
+        var fil = 1, col = 1, ft = 0, ct = 0, it = 0;;
 
         while (ind < tex.length) {
             car = tex[ind];
@@ -27,6 +27,7 @@ class AnaLex {
                     lex = "";
                     ft = fil;
                     ct = col;
+                    it = ind;
 
                     if (this.verLet(car) | car == '_') {
                         est = 1;
@@ -36,10 +37,10 @@ class AnaLex {
                         lex += car;
                     } else if (car == '"') {
                         est = 3;
-                        lex += car;
+                        //lex += car;
                     } else if (car == '\'') {
                         est = 4;
-                        lex += car;
+                        //lex += car;
                     } else if (car == '/') {
                         est = 5;
                         lex += car;
@@ -53,13 +54,13 @@ class AnaLex {
                     } else if (car == '\t' | car == '\r' || car == ' ') {
                         // caracteres omitibles
                     } else {
-                        this.agrErr(car + " " + ft + " " + ct);
+                        this.agrErr("tkErr", car, ft, ct, "Error Lexico");
                     }
 
                     col++;
                     ind++;
                     break;
-                /////////////////////////// IDENTIFICADORES
+
                 // estado 1
                 case 1:
                     if (this.verLet(car) | this.verNum(car) | car == '_') {
@@ -68,11 +69,10 @@ class AnaLex {
                         col++;
                     } else {
                         est = 0;
-                        this.agrTok(this.verPalRes(lex) + " " + lex + " " + ft + " " + ct);
+                        this.agrTok(this.verTPalRes(lex), lex, ft, ct, "Identificador");
                     }
                     break;
 
-                /////////////////////////// NUMEROS
                 // estado 2
                 case 2:
                     if (this.verNum(car)) {
@@ -86,121 +86,60 @@ class AnaLex {
                         col++;
                     } else {
                         est = 0;
-                        this.agrTok(lex + " " + ft + " " + ct);
+                        this.agrTok("tkNum", lex, ft, ct, "Numero");
                     }
                     break;
 
-                // estado 7
-                case 7:
-                    if (this.verNum(car)) {
-                        est = 13;
-                        lex += car;
-                        ind++;
-                        col++;
-                    } else {
-                        est = 0;
-                    }
-                    break;
-
-                // estado 13
-                case 13:
-                    if (this.verNum(car)) {
-                        lex += car;
-                        ind++;
-                        col++;
-                    } else {
-                        est = 0;
-                        this.agrTok(lex + " " + ft + " " + ct);
-                    }
-                    break;
-
-                /////////////////////////// CADENAS
                 // estado 3
                 case 3:
                     if (car == '"') {
                         est = 0;
-                        lex += car;
-                        col++;
-                        this.agrTok(lex + " " + ft + " " + ct);
+                        //lex += car;
+                        this.agrTok("tkCad", lex, ft, ct, "Cadena");
                     } else if (car == '\\') {
                         est = 8;
-                        lex += car;
-                        col++;
+                        //lex += car;´
+                    } else if (car == '\n') {
+                        est = 0;
+                        col = ct;
+                        fil = ft;
+                        ind = it;
                     } else {
                         lex += car;
-                        col++;
                     }
+                    col++;
                     ind++;
                     break;
 
-                // estado 8
-                case 8:
-                    if (this.verSim(car)) {
-                        est = 3;
-                        lex += car;
-                        ind++;
-                        col++;
-                    } else if (car == 'n' | car == 't' | car == 'r' | car == '"') {
-                        est = 3;
-                        lex += car;
-                        ind++;
-                        col++;
-                    } else {
-                        est = 0;
-                    }
-                    break;
-
-                /////////////////////////// CARACTERES
                 // estado 4
                 case 4:
-                    if (car == '\\') {
-                        est = 10;
-                        lex += car;
-                        ind++;
-                        col++;
-                    } else if (this.verLet(car) | this.verNum(car) | this.verSim(car) | car == '"') {
-                        est = 9;
-                        lex += car;
-                        ind++;
-                        col++;
-                    } else {
-                        est = 0;
-
-                    }
-                    break;
-                // estado 9
-                case 9:
                     if (car == '\'') {
                         est = 0;
-                        lex += car;
-                        col++;
-                        this.agrTok(lex + " " + ft + " " + ct);
-                    } else {
-                        est = 0;
-                    }
-                    break;
-                // estado 10
-                case 10:
-                    if (this.verSim(car)) {
+                        //lex += car;
+                        if (lex.length >= 1 & lex.length <= 2) {
+                            this.agrTok("tkCar", lex, ft, ct, "Caracter");
+                        } else {
+                            this.agrTok("tkCadHtm", lex, ft, ct, "Cadena HTML");
+                        }
+                    } else if (car == '\\') {
                         est = 9;
-                        lex += car;
-                        ind++;
-                        col++;
-                    } else if (car == 'n' | car == 't' | car == 'r' | car == '"' | car == '\'' | car == '\\') {
-                        est = 9;
-                        lex += car;
-                        ind++;
-                        col++;
-                    } else {
+                        //lex += car;
+                    } else if (car == '\n') {
                         est = 0;
+                        col = ct;
+                        fil = ft;
+                        ind = it;
+                    } else {
+                        lex += car;
                     }
+                    ind++;
+                    col++;
                     break;
 
-                /////////////////////////// COMENTARIOS
                 // estado 5
                 case 5:
                     if (car == '/') {
-                        est = 11;
+                        est = 10;
                         lex += car;
                         ind++;
                         col++;
@@ -211,24 +150,68 @@ class AnaLex {
                         col++;
                     } else {
                         est = 0;
-                        this.agrTok(lex + " " + ft + " " + ct);
+                        this.agrTok("tkSBarInc", lex, ft, ct, "Simbolo");
                     }
                     break;
 
-                // estado 11
-                case 11:
+                // estado 6
+                case 6:
+                    est = 0;
+                    this.agrTok(this.verTSim(lex), lex, ft, ct, "Simbolo");
+                    break;
+
+                // estado 7
+                case 7:
+                    if (this.verNum(car)) {
+                        est = 12;
+                        lex += car;
+                        ind++;
+                        col++;
+                    } else {
+                        est = 0;
+                    }
+                    break;
+
+                // estado 8
+                case 8:
+                    est = 3;
+                    if (this.verSimEsp(car)) {
+                        lex += "\\" + car;
+                    } else {
+                        this.agrErr("tkErr", '\\', ft, ct, "Error Lexico");
+                        lex += car;
+                    }
+                    ind++;
+                    col++;
+                    break;
+
+                // estado 9
+                case 9:
+                    est = 4;
+                    if (this.verSimEsp(car)) {
+                        lex += "\\" + car;
+                    } else {
+                        this.agrErr("tkErr", '\\', ft, ct, "Error Lexico");
+                        lex += car;
+                    }
+                    ind++;
+                    col++;
+                    break;
+
+                // estado 10
+                case 10:
                     if (car != '\n') {
                         lex += car;
                         col++;
                         ind++;
                     } else {
                         est = 0;
-                        this.agrTok(lex + " " + ft + " " + ct);
+                        this.agrTok("tkCome", lex, ft, ct, "Comentario");
                     }
                     break;
 
-                // estado 12
-                case 12:
+                // estado 11
+                case 11:
                     if (car != '*') {
                         if (car != '\n') {
                             lex += car;
@@ -238,34 +221,38 @@ class AnaLex {
                             fil++;
                         }
                     } else {
-                        est = 14;
+                        est = 13;
                         lex += car;
                         col++;
                     }
-
                     ind++;
                     break;
 
-                // estado 11
-                case 14:
+                // estado 12
+                case 12:
+                    if (this.verNum(car)) {
+                        lex += car;
+                        ind++;
+                        col++;
+                    } else {
+                        est = 0;
+                        this.agrTok("tkDec", lex, ft, ct, "Deciamal");
+                    }
+                    break;
+
+                // estado 13
+                case 13:
                     if (car == '/') {
                         est = 0;
                         lex += car;
                         col++;
-                        this.agrTok(lex + " " + ft + " " + ct);
+                        this.agrTok("tkCome", lex, ft, ct, "Comentario");
                     } else {
-                        est = 12;
+                        est = 11;
                         lex += car;
                         col++;
                     }
                     ind++;
-                    break;
-
-                /////////////////////////// SIMBOLOS
-                // estado 6
-                case 6:
-                    est = 0;
-                    this.agrTok(lex + " " + ft + " " + ct);
                     break;
             }
         }
@@ -275,26 +262,31 @@ class AnaLex {
         con.innerHTML = "//////////////////\n";
         con.innerHTML += "Tokens:\n";
 
+        var tk;
         for (var i = 0; i < this.lisTok.length; i++) {
-            con.innerHTML += this.lisTok[i] + "\n";
+            tk = this.lisTok[i];
+            con.innerHTML += tk.tok + " - " + tk.lex + " - " + tk.fil + " - " + tk.col + " - " + tk.des + "\n";
         }
 
         con.innerHTML += "Errores:\n";
         for (var i = 0; i < this.lisErr.length; i++) {
-            con.innerHTML += this.lisErr[i] + "\n";
+            tk = this.lisErr[i];
+            con.innerHTML += tk.tok + " - " + tk.lex + " - " + tk.fil + " - " + tk.col + " - " + tk.des + "\n";
         }
 
         //alert("fin analisis")
     }
 
     // agrega tokens 
-    agrTok(lex) {
-        this.lisTok.push(lex);
+    agrTok(tok, lex, fil, col, des) {
+        let tk = new Token(tok, lex, fil, col, des);
+        this.lisTok.push(tk);
     }
 
     // agrega erroes
-    agrErr(lex) {
-        this.lisErr.push(lex);
+    agrErr(tok, lex, fil, col, des) {
+        let tk = new Token(tok, lex, fil, col, des);
+        this.lisErr.push(tk);
     }
 
     // funciones de verificacion
@@ -317,9 +309,6 @@ class AnaLex {
     verSim(c) {
         switch (c) {
             // sintaxis
-            case '\'':
-                return true;
-                break;
             case '.':
                 return true;
                 break;
@@ -384,7 +373,31 @@ class AnaLex {
         return false;
     }
 
-    verPalRes(lex) {
+    verSimEsp(c) {
+        switch (c) {
+            case '\\':
+                return true;
+                break;
+            case '\'':
+                return true;
+                break;
+            case '\"':
+                return true;
+                break;
+            case 'n':
+                return true;
+                break;
+            case 't':
+                return true;
+                break;
+            case 'r':
+                return true;
+                break;
+        }
+        return false;
+    }
+
+    verTPalRes(lex) {
         lex = lex.toLowerCase();
 
         switch (lex) {
@@ -444,7 +457,7 @@ class AnaLex {
 
             ///////////////// ciclos
             case "for":
-                return "";
+                return "tkFor";
                 break;
 
             case "do":
@@ -463,6 +476,92 @@ class AnaLex {
                 break;
         }
         return "tkIde";
+    }
+
+    verTSim(c) {
+        switch (c) {
+            // sintaxis
+            case '.':
+                return "tkSPun";
+                break;
+            case ',':
+                return "tkSCom";
+                break;
+            case ':':
+                return "tkSDosPun";
+                break;
+            case ';':
+                return "tkSPunCom";
+                break;
+            case '{':
+                return "tkSAbrLla";
+                break;
+            case '}':
+                return "tkSCieLla";
+                break;
+            case '(':
+                return "tkSAbrPar";
+                break;
+            case ')':
+                return "tkSCiePar";
+                break;
+            case '[':
+                return "tkSAbrCor";
+                break;
+            case ']':
+                return "tkSCieCor";
+                break;
+            // relacionales
+            case '=':
+                return "tkSIgu";
+                break;
+            case '<':
+                return "tkSMen";
+                break;
+            case '>':
+                return "tkSMay";
+                break;
+            case '!':
+                return "tkSAdm";
+                break;
+            // aritmeticos
+            case '+':
+                return "tkSMas";
+                break;
+            case '-':
+                return "tkSGui";
+                break;
+            case '*':
+                return "tkSAst";
+                break;
+            // logicos
+            case '&':
+                return "tkSAmp";
+                break;
+            case '|':
+                return "tkSBarVer";
+                break;
+            // especiales
+            case '\\':
+                return "tkSBarInv";
+                break;
+            case '\'':
+                return "tkSComSim";
+                break;
+            case '\"':
+                return "tkSComDob";
+                break;
+            case 'n':
+                return "tkSSal";
+                break;
+            case 't':
+                return "tkSTab";
+                break;
+            case 'r':
+                return "tkSRet";
+                break;
+        }
+        return "TkSDes";
     }
 
 
