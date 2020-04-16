@@ -8,6 +8,10 @@ class AnaLex {
     
     ///////////////////////// METODOS
     analizar(tex) {
+        var b = -20;
+        var a = -10+-b;
+        alert(a);
+
         tex += "\n  ";
         this.lisTok = [];
         this.lisErr = [];
@@ -397,6 +401,7 @@ class AnaLex {
         return false;
     }
 
+    // funciones de espesificacion Token
     verTPalRes(lex) {
         lex = lex.toLowerCase();
 
@@ -406,16 +411,16 @@ class AnaLex {
                 return "tkInt";
                 break;
             case "double":
-                return "tokDou";
+                return "tkDou";
                 break;
             case "char":
                 return "tkCha";
                 break;
             case "bool":
-                return "tkBol";
+                return "tkBoo";
                 break;
             case "string":
-                return "tkstr";
+                return "tkStr";
                 break;
 
             ///////////////// de funcion
