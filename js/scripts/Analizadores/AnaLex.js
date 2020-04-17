@@ -5,13 +5,9 @@ class AnaLex {
         this.lisTok = [];
         this.lisErr = [];
     }
-    
+
     ///////////////////////// METODOS
     analizar(tex) {
-        var b = -20;
-        var a = -10+-b;
-        alert(a);
-
         tex += "\n  ";
         this.lisTok = [];
         this.lisErr = [];
@@ -41,10 +37,10 @@ class AnaLex {
                         lex += car;
                     } else if (car == '"') {
                         est = 3;
-                        //lex += car;
+                        lex += car;
                     } else if (car == '\'') {
                         est = 4;
-                        //lex += car;
+                        lex += car;
                     } else if (car == '/') {
                         est = 5;
                         lex += car;
@@ -58,7 +54,7 @@ class AnaLex {
                     } else if (car == '\t' | car == '\r' || car == ' ') {
                         // caracteres omitibles
                     } else {
-                        this.agrErr("tkErr", car, ft, ct, "Error Lexico");
+                        this.agrErr("tkErr", car, ft, ct, "ERR");
                     }
 
                     col++;
@@ -73,7 +69,7 @@ class AnaLex {
                         col++;
                     } else {
                         est = 0;
-                        this.agrTok(this.verTPalRes(lex), lex, ft, ct, "Identificador");
+                        this.agrTok(this.verTPalRes(lex), lex, ft, ct, "IDE");
                     }
                     break;
 
@@ -90,7 +86,7 @@ class AnaLex {
                         col++;
                     } else {
                         est = 0;
-                        this.agrTok("tkNum", lex, ft, ct, "Numero");
+                        this.agrTok("tkNum", lex, ft, ct, "NUM");
                     }
                     break;
 
@@ -98,8 +94,8 @@ class AnaLex {
                 case 3:
                     if (car == '"') {
                         est = 0;
-                        //lex += car;
-                        this.agrTok("tkCad", lex, ft, ct, "Cadena");
+                        lex += car;
+                        this.agrTok("tkCad", lex, ft, ct, "CAD");
                     } else if (car == '\\') {
                         est = 8;
                         //lex += car;´
@@ -119,11 +115,11 @@ class AnaLex {
                 case 4:
                     if (car == '\'') {
                         est = 0;
-                        //lex += car;
+                        lex += car;
                         if (lex.length >= 1 & lex.length <= 2) {
-                            this.agrTok("tkCar", lex, ft, ct, "Caracter");
+                            this.agrTok("tkCar", lex, ft, ct, "CAR");
                         } else {
-                            this.agrTok("tkCadHtm", lex, ft, ct, "Cadena HTML");
+                            this.agrTok("tkCadHtm", lex, ft, ct, "CADHTM");
                         }
                     } else if (car == '\\') {
                         est = 9;
@@ -148,20 +144,20 @@ class AnaLex {
                         ind++;
                         col++;
                     } else if (car == '*') {
-                        est = 12;
+                        est = 11;
                         lex += car;
                         ind++
                         col++;
                     } else {
                         est = 0;
-                        this.agrTok("tkSBarInc", lex, ft, ct, "Simbolo");
+                        this.agrTok("tkSBarInc", lex, ft, ct, "SIM");
                     }
                     break;
 
                 // estado 6
                 case 6:
                     est = 0;
-                    this.agrTok(this.verTSim(lex), lex, ft, ct, "Simbolo");
+                    this.agrTok(this.verTSim(lex), lex, ft, ct, "SIM");
                     break;
 
                 // estado 7
@@ -182,7 +178,7 @@ class AnaLex {
                     if (this.verSimEsp(car)) {
                         lex += "\\" + car;
                     } else {
-                        this.agrErr("tkErr", '\\', ft, ct, "Error Lexico");
+                        this.agrErr("tkErr", '\\', ft, ct, "ERR");
                         lex += car;
                     }
                     ind++;
@@ -195,7 +191,7 @@ class AnaLex {
                     if (this.verSimEsp(car)) {
                         lex += "\\" + car;
                     } else {
-                        this.agrErr("tkErr", '\\', ft, ct, "Error Lexico");
+                        this.agrErr("tkErr", '\\', ft, ct, "ERR");
                         lex += car;
                     }
                     ind++;
@@ -210,7 +206,7 @@ class AnaLex {
                         ind++;
                     } else {
                         est = 0;
-                        this.agrTok("tkCome", lex, ft, ct, "Comentario");
+                        this.agrTok("tkCom", lex, ft, ct, "COM");
                     }
                     break;
 
@@ -240,7 +236,7 @@ class AnaLex {
                         col++;
                     } else {
                         est = 0;
-                        this.agrTok("tkDec", lex, ft, ct, "Deciamal");
+                        this.agrTok("tkDec", lex, ft, ct, "DEC");
                     }
                     break;
 
@@ -250,7 +246,7 @@ class AnaLex {
                         est = 0;
                         lex += car;
                         col++;
-                        this.agrTok("tkCome", lex, ft, ct, "Comentario");
+                        this.agrTok("tkComMul", lex, ft, ct, "COMMUL");
                     } else {
                         est = 11;
                         lex += car;
@@ -269,16 +265,15 @@ class AnaLex {
         var tk;
         for (var i = 0; i < this.lisTok.length; i++) {
             tk = this.lisTok[i];
-            con.innerHTML += tk.tok + " - " + tk.lex + " - " + tk.fil + " - " + tk.col + " - " + tk.des + "\n";
+            con.innerHTML += tk.tok + " - " + tk.lex + " - " + tk.fil + " - " + tk.col + " - " + tk.tip + "\n";
         }
 
         con.innerHTML += "Errores:\n";
         for (var i = 0; i < this.lisErr.length; i++) {
             tk = this.lisErr[i];
-            con.innerHTML += tk.tok + " - " + tk.lex + " - " + tk.fil + " - " + tk.col + " - " + tk.des + "\n";
+            con.innerHTML += tk.tok + " - " + tk.lex + " - " + tk.fil + " - " + tk.col + " - " + tk.tip + "\n";
         }
 
-        //alert("fin analisis")
     }
 
     // agrega tokens 
@@ -408,19 +403,25 @@ class AnaLex {
         switch (lex) {
             //////////////// de variable
             case "int":
-                return "tkInt";
+                return "tkPInt";
                 break;
             case "double":
-                return "tkDou";
+                return "tkPDou";
                 break;
             case "char":
-                return "tkCha";
+                return "tkPCha";
                 break;
             case "bool":
-                return "tkBoo";
+                return "tkPBoo";
                 break;
             case "string":
-                return "tkStr";
+                return "tkPStr";
+                break;
+            case "true":
+                return "tkTru";
+                break;
+            case "false":
+                return "tkFal";
                 break;
 
             ///////////////// de funcion

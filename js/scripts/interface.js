@@ -1,5 +1,11 @@
 
-const tkInt = "tkInt", tkDou = "tkDou", tkCha = "tkCha", tkBoo = "tkBoo", tkStr = "tkStr", tkVoi = "tkVoi", tkMai = "tkMai", tkRet = "tkRet", tkBre = "tkBre", tkCont = "tkCont", tkIf = "tkIf", tkEls = "tkEls", tkSwi = "tkSwi", tkCas = "tkCas", tkDef = "tkDef", tkFor = "tkFor", tkDo = "tkDo", tkWhi = "tkWhi", tkCons = "tkCons", tkWri = "tkWri", tkIde = "tkIde", tkSPun = "tkSPun", tkSCom = "tkSCom", tkSDosPun = "tkSDosPun", tkSPunCom = "tkSPunCom", tkSAbrLla = "tkSAbrLla", tkSCieLla = "tkSCieLla", tkSAbrPar = "tkSAbrPar", tkSCiePar = "tkSCiePar", tkSAbrCor = "tkSAbrCor", tkSCieCor = "tkSCieCor", tkSIgu = "tkSIgu", tkSMen = "tkSMen", tkSMay = "tkSMay", tkSAdm = "tkSAdm", tkSMas = "tkSMas", tkSGui = "tkSGui", tkSAst = "tkSAst", tkSAmp = "tkSAmp", tkSBarVer = "tkSBarVer", tkSBarInv = "tkSBarInv", tkSComSim = "tkSComSim", tkSComDob = "tkSComDob", tkSSal = "tkSSal", tkSTab = "tkSTab", tkSRet = "tkSRet", TkSDes = "TkSDes", tkNum = "tkNum", tkCad = "tkCad", tkCar = "tkCar", tkCadHtm = "tkCadHtm", tkSBarInc = "tkSBarInc", tkCome = "tkCome";
+const tkPInt = "tkPInt", tkPDou = "tkPDou", tkPCha = "tkPCha", tkPBoo = "tkPBoo", tkPStr = "tkPStr";
+const tkTru = "tkTru", tkFal = "tkFal", tkVoi = "tkVoi", tkMai = "tkMai", tkRet = "tkRet", tkBre = "tkBre", tkCont = "tkCont", tkIf = "tkIf", tkEls = "tkEls", tkSwi = "tkSwi", tkCas = "tkCas", tkDef = "tkDef", tkFor = "tkFor", tkDo = "tkDo", tkWhi = "tkWhi", tkCons = "tkCons", tkWri = "tkWri", tkSPun = "tkSPun", tkSCom = "tkSCom", tkSDosPun = "tkSDosPun", tkSPunCom = "tkSPunCom", tkSAbrLla = "tkSAbrLla", tkSCieLla = "tkSCieLla", tkSAbrPar = "tkSAbrPar", tkSCiePar = "tkSCiePar", tkSAbrCor = "tkSAbrCor", tkSCieCor = "tkSCieCor", tkSIgu = "tkSIgu", tkSMen = "tkSMen", tkSMay = "tkSMay", tkSAdm = "tkSAdm", tkSMas = "tkSMas", tkSGui = "tkSGui", tkSAst = "tkSAst", tkSAmp = "tkSAmp", tkSBarVer = "tkSBarVer", tkSBarInv = "tkSBarInv", tkSComSim = "tkSComSim", tkSComDob = "tkSComDob", tkSSal = "tkSSal", tkSTab = "tkSTab", tkSRet = "tkSRet", TkSDes = "TkSDes", tkSBarInc = "tkSBarInc", tkEps = "tkEps";
+const tkNum = "tkNum", tkCad = "tkCad", tkCar = "tkCar", tkCadHtm = "tkCadHtm", tkDec = "tkDec", tkCom = "tkCom", tkComMul = "tkComMul", tkIde = "tkIde";
+
+
+const tipIde = "IDE", tipNum = "NUM", tipCad = "CAD", tipCar = "CAR", tipCadHtm = "CADHTM", tipSim = "SIM", tipCom = "COM", tipComMul = "COMMUL", tipDec = "DEC", tipEps = "EPS";
+
 np = 0;
 
 //////////////////////////////////// Archivo
@@ -84,8 +90,10 @@ function ana() {
   ide = ele.getAttribute('id');
   ttex = document.getElementById("t" + ide).value;
 
-  let a = new AnaLex();
-  a.analizar(ttex);
+  let al = new AnaLex();
+  al.analizar(ttex);
+  let as = new AnaSin();
+  as.analizar(al.lisTok);
 
 }
 
