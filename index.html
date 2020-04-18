@@ -110,10 +110,32 @@
 
           </div>
 
-          <!-- Texto Salida -->
+          <!-- Pestañas html json -->
           <div class="span6">
-            <p>Salida:</p>
-            <textarea id="texSal" type="email" wrap="off" name="texto_salida" rows="11" class="input-block-level" disabled></textarea>
+
+            <!-- titulos pestañas -->
+            <ul class="nav nav-tabs">
+              <li class="active"><a href="#trad" data-toggle="tab">Traductor</a></li>
+              <li class=""><a href="#alex" data-toggle="tab">Analisis Lexico</a></li>
+              <li class=""><a href="#asin" data-toggle="tab">Analisis Sintactico</a></li>
+            </ul>
+
+            <!-- contenido pestañas -->
+            <div class="tab-content">
+
+              <div class="tab-pane active" id="trad">
+                <textarea id="texTrad" type="email" wrap="off" name="texto_html" rows="10" class="input-block-level" disabled></textarea>
+              </div>
+
+              <div class="tab-pane" id="alex">
+                <textarea id="texALex" type="email" wrap="off" name="texto_json" rows="10" class="input-block-level" disabled></textarea>
+              </div>
+
+              <div class="tab-pane" id="asin">
+                <textarea id="texASin" type="email" wrap="off" name="texto_json" rows="10" class="input-block-level" disabled></textarea>
+              </div>
+
+            </div>
 
           </div>
 

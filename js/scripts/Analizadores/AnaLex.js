@@ -257,9 +257,9 @@ class AnaLex {
             }
         }
 
-        con = document.getElementById("texSal");
+        con = document.getElementById("texALex");
 
-        con.innerHTML = "//////////////////\n";
+        con.innerHTML = "////////////////// Analisis Lexico\n";
         con.innerHTML += "Tokens:\n";
 
         var tk;
