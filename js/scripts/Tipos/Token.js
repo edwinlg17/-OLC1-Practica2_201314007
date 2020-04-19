@@ -5,6 +5,5 @@ class Token {
         this.fil = fil;
         this.col = col;
         this.tip = tip;
-
     }
 }
