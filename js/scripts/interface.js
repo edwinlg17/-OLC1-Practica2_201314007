@@ -13,6 +13,7 @@ np = 0;
 function nuePes() {
   np++;
   crePes("nuevo " + np, "", np);
+  
 }
 
 function abr() {
@@ -99,6 +100,7 @@ function ana() {
 }
 
 function repTok() {
+  
 
 }
 
@@ -111,6 +113,8 @@ function repErr() {
 
   console.log(ttex);
   alert(ttex);
+
+
 }
 
 function crePes(nom, cont, nps) {

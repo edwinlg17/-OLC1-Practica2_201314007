@@ -116,7 +116,7 @@ class AnaLex {
                     if (car == '\'') {
                         est = 0;
                         lex += car;
-                        if (lex.length >= 1 & lex.length <= 2) {
+                        if (lex.length >= 3 & lex.length <= 4) {
                             this.agrTok("tkCar", lex, ft, ct, "CAR");
                         } else {
                             this.agrTok("tkCadHtm", lex, ft, ct, "CADHTM");
@@ -191,8 +191,7 @@ class AnaLex {
                     if (this.verSimEsp(car)) {
                         lex += "\\" + car;
                     } else {
-                        this.agrErr("tkErr", '\\', ft, ct, "ERR");
-                        lex += car;
+                        lex += "\\" + car;
                     }
                     ind++;
                     col++;
@@ -273,6 +272,8 @@ class AnaLex {
             tk = this.lisErr[i];
             con.innerHTML += tk.tok + " - " + tk.lex + " - " + tk.fil + " - " + tk.col + " - " + tk.tip + "\n";
         }
+
+        this.impHTML();
 
     }
 
@@ -570,5 +571,29 @@ class AnaLex {
         return "TkSDes";
     }
 
+    impHTML() {
+        var thtml = document.getElementById("texHtml");
+        thtml.innerHTML = "";
+        var cad = "";
+        for (var i = 0; i < this.lisTok.length; i++) {
+            var ttk = this.lisTok[i];
+            if (ttk.tok == tkCadHtm) {
+                var ct = ttk.lex;
+                if (ct.length > 2) {
+                    ct = ct.substring(1, ct.length - 1);
+                    cad += ct;
+                }
+            }
+
+        }
+
+        //var ct = cad.replace(/>[ ]*</gi, ">\n<");
+        var ct = cad;
+        ct = ct.replace(/\\n/gi, "\n");
+        ct = ct.replace(/\\t/gi, "\t");
+        ct = ct.replace(/\\r/gi, "\r");
+        //ct = ct.replace(/>/gi, ">\n");
+        thtml.innerHTML = ct;
+    }
 
 }
