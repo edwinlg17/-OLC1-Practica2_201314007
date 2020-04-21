@@ -9,11 +9,14 @@ const tipIde = "IDE", tipNum = "NUM", tipCad = "CAD", tipCar = "CAR", tipCadHtm 
 
 np = 0;
 
+var errLex = [];
+var errSin = [];
+
 //////////////////////////////////// Archivo
 function nuePes() {
   np++;
   crePes("nuevo " + np, "", np);
-  
+
 }
 
 function abr() {
@@ -94,27 +97,79 @@ function ana() {
 
   let al = new AnaLex();
   al.analizar(ttex);
+  errLex = al.obtErrLex();
   let as = new AnaSin();
   as.analizar(al.lisTok);
+  errSin = as.obtErrSin();
 
+}
+
+function repTra() {
+  ttextra = document.getElementById("texTrad").value;
+
+  var elem = document.getElementById('genTra');
+  elem.download = "traduccion.py";
+  elem.href = "data:application/octet-stream," + encodeURIComponent(ttextra);
 }
 
 function repTok() {
-  
+
 
 }
 
+
 //////////////////////////////////// otras
 function repErr() {
-  con = document.getElementsByClassName("tab-pane active");
-  ele = con[0];
-  ide = ele.getAttribute('id');
-  ttex = document.getElementById("t" + ide).value;
+  var cad = "<html>\n";
+  cad += "\t<head>\n";
+  cad += "\t\t<title>Lista de errores</title>\n";
 
-  console.log(ttex);
-  alert(ttex);
+  cad += "\t\t<style>\n";
+  cad += "table{border-collapse:collapse;}  th,tr,td{    border:1px solid #000;    width:150px;    height:45px;    vertical-align:middle;    text-align:center;  }  th{    color:#fff;    background-color: #252525;  }    tr:nth-child(odd) td{    background-color:#eee;  }\n";
+
+  cad += "\t\t</style>\n";
+
+  cad += "\t</head>\n";
+  cad += "\t<body>\n";
+  cad += "\t\t<table BORDER class=\"table table-bordered table-striped mb-0\">\n";
+
+  cad += "\t\t\t<thead id=tabTit>\n";
+  cad += "\t\t\t\t<th scope=\"col\">Descripcion</th>\n";
+  cad += "\t\t\t\t<th scope=\"col\">Lexema</th>\n";
+  cad += "\t\t\t\t<th scope=\"col\">Fila</th>\n";
+  cad += "\t\t\t\t<th scope=\"col\">Columna</th>\n";
+  cad += "\t\t\t</thead>\n";
+
+  cad += "\t\t\t<tbody id=tabLin>\n";
+  for (var i = 0; i < errLex.length; i++) {
+    var tt = errLex[i];
+    cad += "\t\t\t<tr>";
+    cad += "\t\t\t\t<td>Error Lexico</td>\n";
+    cad += "\t\t\t\t<td>" + tt.lex + "</td>\n";
+    cad += "\t\t\t\t<td>" + tt.fil + "</td>\n";
+    cad += "\t\t\t\t<td>" + tt.col + "</td>\n";
+    cad += "\t\t\t</tr>\n";
+  }
+
+  for (var i = 0; i < errSin.length; i++) {
+    var tt = errSin[i];
+    cad += "\t\t\t<tr>";
+    cad += "\t\t\t\t<td>" + tt[0] + "</td>\n";
+    cad += "\t\t\t\t<td>" + tt[1] + "</td>\n";
+    cad += "\t\t\t\t<td>" + tt[2] + "</td>\n";
+    cad += "\t\t\t\t<td>" + tt[3] + "</td>\n";
+    cad += "\t\t\t</tr>\n";
+  }
+  cad += "\t\t\t</tbody>\n";
+
+  cad += "\t\t</table>\n";
+  cad += "\t</body>\n";
+  cad += "</html>\n";
 
 
+  var elem = document.getElementById('genErr');
+  elem.download = "errores.html";
+  elem.href = "data:application/octet-stream," + encodeURIComponent(cad);
 }
 
 function crePes(nom, cont, nps) {

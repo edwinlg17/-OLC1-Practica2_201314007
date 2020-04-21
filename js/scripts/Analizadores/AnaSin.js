@@ -2,6 +2,7 @@ class AnaSin {
     ////////////////////////// CONSTRUCTOR
     constructor() {
         this.lisTok = [];
+        this.lisErr = [];
         this.con = document.getElementById("texASin");
         this.con.innerHTML = "////////////////// Analisis Sintactico\n";
         this.con2 = document.getElementById("texTrad");
@@ -21,6 +22,11 @@ class AnaSin {
     ////////////////////////// METODOS
     analizar(lisTok) {
         this.lisTok = lisTok;
+        this.lisErr = [];
+
+        this.lisTokTra = [];
+        this.lisVarTem = [];
+
         this.tab.innerHTML = "";
 
         if (lisTok.length > 0) {
@@ -32,7 +38,10 @@ class AnaSin {
         var ct = "";
         if (this.lisTokTra.length > 0) {
             for (var i = 0; i < this.lisTokTra.length; i++) {
-                ct += this.lisTokTra[i] + " ";
+                //ct += "*" + this.lisTokTra[i];
+                if (this.lisTokTra[i] != "") {
+                    ct += this.lisTokTra[i];
+                }
             }
             this.con2.innerHTML = ct;
         }
@@ -64,10 +73,10 @@ class AnaSin {
             if (ver) ver = this.estMAIMET(it);
             return ver;
         } else if (this.verTok(tkCom)) {
-            if (ver) this.con2.innerHTML += "\n";
+            this.traCom();
             return true;
         } else if (this.verTok(tkComMul)) {
-            if (ver) this.con2.innerHTML += "\n";
+            this.traComMul();
             return true;
         }
         return false;
@@ -102,7 +111,7 @@ class AnaSin {
             if (ver) ver = this.verTok(tkSAbrLla);
             if (ver) ver = this.estINS();
             if (ver) ver = this.verTok(tkSCieLla);
-            if (ver) this.traFun(it);
+            if (ver) this.traMai(it);
             if (!ver) ver = this.estErr(it);
             return true;
         }
@@ -118,6 +127,7 @@ class AnaSin {
             if (ver) ver = this.verTok(tkSAbrLla);
             if (ver) ver = this.estINSMET();
             if (ver) ver = this.verTok(tkSCieLla);
+            if (ver) this.traFun(it);
             if (!ver) ver = this.estErr(it);
             return ver;
         }
@@ -132,6 +142,7 @@ class AnaSin {
             if (ver) ver = this.verTok(tkSAbrLla);
             if (ver) ver = this.estINSFUN();
             if (ver) ver = this.verTok(tkSCieLla);
+            if (ver) this.traFun(it);
             if (!ver) ver = this.estErr(it);
             return ver;
         }
@@ -290,6 +301,7 @@ class AnaSin {
         } else if (this.verTok(tkRet)) {
             var ver = true;
             if (ver) ver = this.estASI();
+            if (ver) this.traRet(it);
             if (!ver) { ver = this.estErr(it); ver = true; }
             if (ver) ver = this.estINSFUN();
             return ver;
@@ -306,6 +318,7 @@ class AnaSin {
         } else if (this.verTok(tkRet)) {
             var ver = true;
             if (ver) ver = this.verTok(tkSPunCom);
+            if (ver) this.traRet(it);
             if (!ver) { ver = this.estErr(it); ver = true; }
             if (ver) ver = this.estINSMET();
             return ver;
@@ -322,12 +335,14 @@ class AnaSin {
         } else if (this.verTok(tkBre)) {
             var ver = true;
             if (ver) ver = this.verTok(tkSPunCom);
+            if (ver) this.traRet(it);
             if (!ver) { ver = this.estErr(it); ver = true; }
             if (ver) ver = this.estINSCIC();
             return true;
         } else if (this.verTok(tkCont)) {
             var ver = true;
             if (ver) ver = this.verTok(tkSPunCom);
+            if (ver) this.traRet(it);
             if (!ver) { ver = this.estErr(it); ver = true; }
             if (ver) ver = this.estINSCIC();
             return ver;
@@ -358,10 +373,10 @@ class AnaSin {
             this.con2.innerHTML += "\n";
             return true;
         } else if (this.verTok(tkCom)) {
-            this.con2.innerHTML += "\n";
+            this.traCom();
             return true;
         } else if (this.verTok(tkComMul)) {
-            this.con2.innerHTML += "\n";
+            this.traComMul();
             return true;
         }
         return false;
@@ -389,6 +404,7 @@ class AnaSin {
             var ver = true;
             if (ver) ver = this.verTok(tkSIgu);
             if (ver) ver = this.estASI();
+            if (ver) this.traRea(it);
             if (!ver) ver = this.estErr(it);
             return true;
         }
@@ -407,6 +423,7 @@ class AnaSin {
             if (ver) ver = this.estINS();
             if (ver) ver = this.verTok(tkSCieLla);
             if (ver) ver = this.estELS();
+            if (ver) this.traIF(it);
             if (!ver) ver = this.estErr(it);
             return true;
         }
@@ -453,6 +470,7 @@ class AnaSin {
             if (ver) ver = this.verTok(tkSAbrLla);
             if (ver) ver = this.estCAS();
             if (ver) ver = this.verTok(tkSCieLla);
+            if (ver) this.traSwi(it);
             if (!ver) ver = this.estErr(it);
             return ver;
         }
@@ -480,6 +498,7 @@ class AnaSin {
             if (ver) ver = this.verTok(tkSAbrLla);
             if (ver) ver = this.estINSCIC();
             if (ver) ver = this.verTok(tkSCieLla);
+            if (ver) this.traFor(it);
             if (!ver) ver = this.estErr(it);
             return true;
         }
@@ -497,6 +516,7 @@ class AnaSin {
             if (ver) ver = this.verTok(tkSAbrLla);
             if (ver) ver = this.estINSCIC();
             if (ver) ver = this.verTok(tkSCieLla);
+            if (ver) this.traWhi(it);
             if (!ver) ver = this.estErr(it);
             return true;
         }
@@ -516,6 +536,7 @@ class AnaSin {
             if (ver) ver = this.estCOM();
             if (ver) ver = this.verTok(tkSCiePar);
             if (ver) ver = this.verTok(tkSPunCom);
+            if (ver) this.traDO(it);
             if (!ver) ver = this.estErr(it);
             return true;
         }
@@ -541,11 +562,13 @@ class AnaSin {
             var ver = true;
             if (ver) ver = this.verTok(tkSCiePar)
             if (ver) ver = this.verTok(tkSPunCom);
+            if (ver) this.traCon(it);
             if (!ver) ver = this.estErr(it);
             return true;
         } else if (this.verTok(tkSCiePar)) {
             ver = true;
             if (ver) ver = this.verTok(tkSPunCom);
+            if (ver) this.traCon(it);
             if (!ver) ver = this.estErr(it);
             return true;
         }
@@ -643,6 +666,8 @@ class AnaSin {
 
     estVAL() {
         if (this.verTok(tkNum)) {
+            return true;
+        } else if (this.verTok(tkDec)) {
             return true;
         } else if (this.verTok(tkCar)) {
             return true;
@@ -795,16 +820,19 @@ class AnaSin {
             console.log(ie + " " + ia);
             console.log(this.lisTokTra);
             console.log(this.lisTokTra.splice(ie, ia));
-            this.con.innerHTML += "ERROR SINTACTICO " + tem.lex + " fil: " + tem.fil + " col: " + tem.col + "\n";
+            this.con.innerHTML += "ERROR SINTACTICO NO SE ESPERABA -> " + tem.lex + " <- FIL: " + tem.fil + " COL: " + tem.col + "\n";
+
+            this.lisErr.push(["ERROR SINTACTICO NO SE ESPERABA", tem.lex, tem.fil, tem.col]);
 
         } else {
             this.con.innerHTML += "ERROR SINTACTICO falta elemento de cierre\n";
+            this.lisErr.push(["ERROR SINTACTICO FALTA ELEMENTO DE CIERRE FIN DE ARCHIVO", "", "", ""]);
         }
 
         while (this.ind < this.lisTok.length) {
             var tem = this.lisTok[this.ind];
             if (tem.tok == tkSPunCom | tem.tok == tkSCieLla | tem.tok == tkEps) {
-                this.con.innerHTML += "se recupero " + tem.lex + " fil: " + tem.fil + " col: " + tem.col + "\n";
+                //this.con.innerHTML += "se recupero " + tem.lex + " fil: " + tem.fil + " col: " + tem.col + "\n";
                 this.ind++;
                 break;
             }
@@ -817,7 +845,6 @@ class AnaSin {
     eliErr(it, ft) {
         this.lisTokTra.slice(it, ft);
     }
-
 
     // agrega las variables 
     agrVar() {
@@ -883,27 +910,276 @@ class AnaSin {
     }
 
     ///////////////// traducciones
+    traCom() {
+        var cadt = this.lisTokTra[this.obtPos() - 1];
+        cadt = "#" + cadt.substr(2, cadt.length - 1) + "\n";
+        this.lisTokTra[this.obtPos() - 1] = cadt;
+    }
+
+    traComMul() {
+        var cadt = this.lisTokTra[this.obtPos() - 1];
+        cadt = "'''" + cadt.substr(2, cadt.length - 4) + "'''\n";
+        this.lisTokTra[this.obtPos() - 1] = cadt;
+    }
+
     traVar(ie) {
         var ia = this.obtPos();
         this.lisTokTra[ie] = "var";
         this.lisTokTra[ia - 1] = "\n";
-        var ct = "";
-        for (var i = ie; i < ia - 1; i++) {
-            ct += this.lisTokTra[i] + " ";
-            this.lisTokTra[i] = "";
-        }
-        this.lisTokTra.slice(ie + 1, ia);
-        this.lisTokTra[ie] = ct;
+
+        this.conCatEsp(ie, ia - 1);
+    }
+
+    traMai(ie) {
+        var ia = this.obtPos();
+        this.lisTokTra[ie] = "def ";
+        this.lisTokTra[ie + 4] = ":\n";
+        this.conCatEsp(ie, ie + 4);
+        this.insTab(ie + 5, ia - 4);
+        this.lisTokTra[ia - 1] = "\nif __name__ = “__main__”:\n        main()\n";
     }
 
     traFun(ie) {
         var ia = this.obtPos();
         this.lisTokTra[ie] = "def";
-        this.lisTokTra[ie + 4] = ":\n";
-        this.lisTokTra[ia - 1] = "if __name__ = “__main__”:\n        main()\n";
+        var pl = this.obtInd(ie, ia, "{");
+        this.lisTokTra[pl] = ":\n";
+        this.lisTokTra[ia - 1] = "";
 
-        for (var i = ie + 4; i < ia - 1; i++) {
-            this.lisTokTra[i] = "\t" + this.lisTokTra[i];
+        this.conCatEsp(ie, pl);
+
+        this.insTab(pl + 1, ia - 2);
+    }
+
+    traRea(ie) {
+        var ia = this.obtPos();
+        this.lisTokTra[ia - 1] = "\n";
+
+        this.conCatEsp(ie, ia - 1);
+    }
+
+    traIF(ie) {
+        var ia = this.obtPos();
+
+        var ppa = this.obtTodInd(ie, ia, "(");
+        this.reeTod(ppa, "");
+        var ppc = this.obtTodInd(ie, ia, ")");
+        this.reeTod(ppc, "");
+
+        var pla = this.obtTodInd(ie, ia, "{");
+        this.reeTod(pla, ":\n");
+        var plc = this.obtTodInd(ie, ia, "}");
+        this.reeTod(plc, "");
+
+        this.conCatEsp(ie, pla[0]);
+        for (var i = 0; i < plc.length - 1; i++) {
+            this.conCatEsp(plc[i], pla[i + 1]);
+            this.lisTokTra[plc[i]] = this.lisTokTra[plc[i]].replace(/else if/gi, 'elif');
         }
+
+        for (var i = 0; i < pla.length; i++) {
+            this.insTab(pla[i], plc[i]);
+        }
+    }
+
+    traSwi(ie) {
+        var ia = this.obtPos();
+        this.lisTokTra[ie] = "def " + this.lisTokTra[ie];
+
+        var ppc = this.obtInd(ie, ia, ")");
+        this.lisTokTra[ppc] = this.lisTokTra[ppc] + "\n";
+
+        var pl = this.obtInd(ie, ia, "{");
+        this.lisTokTra[pl] = "switcher = " + this.lisTokTra[pl] + "\n";
+
+        var pk = this.obtTodInd(ie, ia, "case");
+        this.reeTod(pk, "");
+
+        for (var i = 0; i < pk.length; i++) {
+            if (this.lisTokTra[pk[i] - 1] == ";") {
+                this.lisTokTra[pk[i] - 1] = ",\n";
+                this.lisTokTra[pk[i] - 2] = "";
+            }
+            this.lisTokTra[pk[i] + 2] = this.lisTokTra[pk[i] + 2] + "\n";
+        }
+
+        var pd = this.obtInd(ie, ia, "default");
+        if (pd != 0) {
+            this.lisTokTra[pd] = "0";
+            this.lisTokTra[pd + 1] = this.lisTokTra[pd + 1] + "\n";
+            this.lisTokTra[pd - 1] = ",\n";
+            this.lisTokTra[pd - 2] = "";
+        }
+
+        if (this.lisTokTra[ia - 2] == ";") {
+            this.lisTokTra[ia - 2] = ",\n";
+            this.lisTokTra[ia - 3] = "";
+        }
+        this.lisTokTra[ia - 1] = "\t}";
+
+        this.conCatEsp(ie, pl)
+
+        this.insTab(pl + 1, ia - 1);
+        this.insTab(pl, ia);
+    }
+
+    traFor(ie) {
+        var ia = this.obtPos();
+        alert(this.lisTokTra[ia - 1]);
+        var cfor = this.lisTokTra[ie];
+        var cide = this.lisTokTra[ie + 3];
+        var ci = this.lisTokTra[ie + 5];
+        var cf1 = this.lisTokTra[ie + 9];
+        var cf2 = this.lisTokTra[ie + 10];
+        var ct = cfor + " " + cide + " in range (" + ci + ", ";
+
+        if (this.verNum(cf1)) {
+            ct += cf1 + ")";
+        } else if (this.verNum(cf2)) {
+            ct += cf2 + ")";
+        }
+
+        var pl = this.obtInd(ie, ia, "{"); // posicion de la llave
+
+        this.lisTokTra[pl] = ":\n"; // elimino la llave
+
+        this.conCatEsp(ie, pl); // elimino todo hasta la llave
+
+        this.lisTokTra[ie] = ct; // inseto la traduccion del for
+
+        this.lisTokTra[ia - 1] = ""; // quilo la llave de cierre
+
+        this.insTab(pl + 1, ia - 1);
+    }
+
+    traWhi(ie) {
+        var ia = this.obtPos();
+        this.lisTokTra[this.obtInd(ie, ia, "(")] = "";
+        this.lisTokTra[this.obtInd(ie, ia, ")")] = "";
+
+        var pl = this.obtInd(ie, ia, "{");
+        this.lisTokTra[pl] = "\n";
+        this.lisTokTra[ia - 1] = "";
+
+        this.conCatEsp(ie, pl);
+        this.insTab(pl + 1, ia - 1);
+    }
+
+    traDO(ie) {
+        var ia = this.obtPos();
+        this.lisTokTra[ie] = "while true";
+        this.lisTokTra[ia - 1] = "\n";
+        var pal = this.obtInd(ie, ia, "{");
+        var pcl = this.obtIndInv(ie, ia, "}");
+
+        this.lisTokTra[pcl] = "";
+        this.lisTokTra[ie + 1] = ":\n";
+
+        this.lisTokTra[pcl + 1] = "\tif";
+        this.lisTokTra[ia - 1] = "";
+
+        var pcp = this.obtIndInv(ie, ia, ")");
+        this.lisTokTra[pcp] += ":";
+
+        this.conCatEsp(pcl + 1, ia - 1);
+        this.lisTokTra[pcl + 2] = "\n";
+        this.lisTokTra[pcl + 3] = "\t\tbreak\n";
+
+        this.insTab(pal + 1, pcl);
+
+    }
+
+    traCon(ie) {
+        var ia = this.obtPos();
+        this.lisTokTra[ie] = "print";
+        this.lisTokTra[ie + 1] = "";
+        this.lisTokTra[ie + 2] = "";
+        this.lisTokTra[ia - 1] = "\n";
+
+        this.conCatEsp(ie, ia - 1);
+    }
+
+    traRet(ie) {
+        var ia = this.obtPos();
+        this.lisTokTra[ia - 1] = "\n";
+        this.conCatEsp(ie, ia - 1);
+    }
+
+    // metodos de traduccion
+    obtInd(pi, pf, bus) {
+        for (var i = pi; i < pf; i++) {
+            if (this.lisTokTra[i] == bus) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    obtIndInv(pi, pf, bus) {
+        for (var i = pf - 1; i > pi - 1; i--) {
+            if (this.lisTokTra[i] == bus) {
+                console.log(this.lisTokTra[i]);
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    obtTodInd(pi, pf, bus) {
+        var list = [];
+        for (var i = pi; i < pf; i++) {
+            if (this.lisTokTra[i] == bus) {
+                list.push(i);
+            }
+        }
+        return list;
+    }
+
+    reeTod(lis, ree) {
+        for (var i = 0; i < lis.length; i++) {
+            var pt = lis[i];
+            this.lisTokTra[pt] = ree;
+        }
+    }
+
+    conCatEsp(pi, pf) {
+        var text = "";
+        for (var i = pi; i < pf; i++) {
+            text += this.lisTokTra[i] + " ";
+            this.lisTokTra[i] = "";
+        }
+
+        this.lisTokTra[pi] = text;
+        //this.lisTokTra.splice(pi, pf)
+    }
+
+    insTab(pi, pf) {
+        for (var i = pi; i < pf; i++) {
+            if (this.lisTokTra[i] != "") {
+                this.lisTokTra[i] = "\t" + this.lisTokTra[i];
+            }
+
+        }
+    }
+
+    // otras
+    verNum(cad) {
+        for (var i = 0; i < cad.length; i++) {
+            var c = cad[i];
+            if (!(this.verDig(c) || c == '.')) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    verDig(c) {
+        if (c >= '0' && c <= '9')
+            return true;
+        return false;
+    }
+
+    obtErrSin() {
+        return this.lisErr;
     }
 }

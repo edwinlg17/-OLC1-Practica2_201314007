@@ -9,6 +9,7 @@ class AnaLex {
     ///////////////////////// METODOS
     analizar(tex) {
         tex += "\n  ";
+        tex = tex.toLowerCase();
         this.lisTok = [];
         this.lisErr = [];
 
@@ -216,6 +217,7 @@ class AnaLex {
                             lex += car;
                             col++;
                         } else {
+                            lex += car;
                             col = 1;
                             fil++;
                         }
@@ -275,6 +277,10 @@ class AnaLex {
 
         this.impHTML();
 
+    }
+
+    obtErrLex() {
+        return this.lisErr;
     }
 
     // agrega tokens 
